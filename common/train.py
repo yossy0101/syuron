@@ -54,7 +54,7 @@ def _val(net=None, loader=None, criterion=None, device='cpu'):
     
     return v_loss, v_acc
 
-def train(epochs=1, net=None, loader=None, datasets=None, use_model=None):
+def train(epochs=1, net=None, loader=None, model_path=None, result_path=None):
     if net==None or loader==None:
         print('net or loader is None')
         return
@@ -69,20 +69,15 @@ def train(epochs=1, net=None, loader=None, datasets=None, use_model=None):
     parallel = False
     if torch.cuda.device_count() > 1:
         print("Let's use", torch.cuda.device_count(), "GPUs!")
-        # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
         net = nn.DataParallel(net)
         parallel = True
     
-    #重みの保存先
-    model_path = './weight/' + use_model + '/' + datasets + '/model.pth'
     #重み読み込み
     print('Weight loading...')
-    #net.load_state_dict(torch.load(model_path))
+    net.load_state_dict(torch.load(model_path))
     
     #履歴
     history = {"val_acc":[], "time":[]}
-    #結果の保存先
-    result_path = './result/' + use_model + '/' + datasets
     
     #define loss function and optimier
     criterion = nn.CrossEntropyLoss()

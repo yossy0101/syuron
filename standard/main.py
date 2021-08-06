@@ -19,8 +19,14 @@ def main():
     use_model = input('What model do you use: ')
     use_model, net = make_model(use_model, num_classes)
     
+    #重みの保存先
+    model_path = './weight/' + use_model + '/' + datasets + '/model.pth'
+
+    #結果の保存先
+    result_path = './result/' + use_model + '/' + datasets
+
     #学習
-    train(EPOCHS, net, loader, datasets, use_model)
+    train(EPOCHS, net, loader, model_path, resutl_path)
     
 if __name__ == '__main__':
     main()
