@@ -1,9 +1,12 @@
+import os
+import sys
 import torch
 from torch.utils.data import DataLoader
 import torchvision
 import torchvision.transforms as transforms
 from torchvision.datasets import CIFAR10, CIFAR100, ImageFolder
-from datasets import TImgNetDataset
+sys.path.append(os.path.abspath("../../torch-datasets"))
+from tiny_imagenet_200.tiny import TImgNetDataset
 
 #データセット読み込み
 def data_load(size=224, batch=32, datasets='cifar100'):
@@ -68,11 +71,11 @@ def data_load_Food101(size=224, batch=32):
 
 def data_load_tinyimagenet(size=224, batch=32):
    print("loading tiny-imagenet-200 dataset...") 
-   trainset = ImageFolder('../../torch-datasets/tiny-imagenet-200/train', transform_train(size))
+   trainset = ImageFolder('../../torch-datasets/tiny_imagenet_200/train', transform_train(size))
    trainloader = DataLoader(trainset, batch_size=batch, shuffle=True, num_workers=2)
    
-   valdir = '../../torch-datasets/tiny-imagenet-200/val/images'
-   valgtfile = '../../torch-datasets/tiny-imagenet-200/val/val_annotations.txt'
+   valdir = '../../torch-datasets/tiny_imagenet_200/val/images'
+   valgtfile = '../../torch-datasets/tiny_imagenet_200/val/val_annotations.txt'
    testset = TImgNetDataset(valdir, valgtfile, trainloader.dataset.class_to_idx.copy(), transform_test(size))
    testloader = DataLoader(testset, batch_size=batch, shuffle=False, num_workers=2)
    

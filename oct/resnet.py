@@ -1,7 +1,8 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from conv import Conv_BN, Conv_BN_ReLU, Oct_BN, Oct_BN_ReLU, Oct_AvgPool2d
+from conv import Conv_BN, Conv_BN_ReLU, Oct_AvgPool2d
+from oct import Oct_BN, Oct_BN_ReLU
 
 class BasicBlock(nn.Module):
     expansion = 1

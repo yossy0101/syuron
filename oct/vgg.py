@@ -1,7 +1,8 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from conv import Oct_BN_ReLU, Oct_MaxPool2d, fc_ReLU_Drop
+from conv import Oct_MaxPool2d, fc_ReLU_Drop
+from oct import Oct_BN_ReLU
 
 class VGG(nn.Module):
     def __init__(self, layers, num_classes=100, alpha=0.0):

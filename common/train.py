@@ -123,5 +123,5 @@ def train(epochs=1, net=None, loader=None, model_path=None, result_path=None):
         print('max_accuracy:%f%%'%max(history["val_acc"]), file=f)
     with open(result_path+'/time.txt', 'a') as f:
         print('avarage time/1epoch:%fs'%(sum(history["time"]) / len(history["time"])), file=f)
-                
+            
     return

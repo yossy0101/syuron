@@ -27,7 +27,7 @@ def main():
     result_path = './result/' + use_model + '/' + datasets
 
     #学習
-    train(EPOCHS, net, loader, model_path, resutl_path)
+    train(EPOCHS, net, loader, model_path, result_path)
     
 if __name__ == '__main__':
     main()
