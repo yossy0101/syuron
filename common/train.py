@@ -67,6 +67,7 @@ def train(epochs=1, net=None, loader=None, model_path=None, result_path=None):
     
     # 複数GPU使用宣言
     parallel = False
+    
     if torch.cuda.device_count() > 1:
         print("Let's use", torch.cuda.device_count(), "GPUs!")
         net = nn.DataParallel(net)
@@ -74,7 +75,7 @@ def train(epochs=1, net=None, loader=None, model_path=None, result_path=None):
     
     #重み読み込み
     print('Weight loading...')
-    net.load_state_dict(torch.load(model_path))
+    #net.load_state_dict(torch.load(model_path))
     
     #履歴
     history = {"val_acc":[], "time":[]}
@@ -93,23 +94,26 @@ def train(epochs=1, net=None, loader=None, model_path=None, result_path=None):
         ##############-----------訓練データ------------------##################
         net.train()
         train_loss, train_acc = _train(net, loader['train'], criterion, optimizer, device)
+        
         with open(result_path+'/train_loss.txt', 'a') as f:
             print(train_loss, file=f)
         with open(result_path+'/train_acc.txt', 'a') as f:
             print(train_acc, file=f)
         
         #重み保存 -- GPU並列化をしているかで保存方法を変更
-        torch.save(net.module.state_dict(), model_path) if parallel==True else torch.save(net.state_dict(), model_path)
+        #torch.save(net.module.state_dict(), model_path) if parallel==True else torch.save(net.state_dict(), model_path)
 
         ####################--------テストデータ------------####################
         net.eval()
         val_loss, val_acc = _val(net, loader['test'], criterion, device)
         history["val_acc"].append(val_acc)
+        
         with open(result_path+'/val_loss.txt', 'a') as f:
             print(val_loss, file=f)
         with open(result_path+'/val_acc.txt', 'a') as f:
             print(val_acc, file=f)
         
+        ###################--------結果を表示-------------#####################
         one_epoch_time = time.time() - start_time
         history["time"].append(one_epoch_time)
         print(' - %.1fs'%(one_epoch_time),' - loss:%.4f'%(train_loss),' - acc:%.4f%%'%(train_acc),
@@ -121,6 +125,7 @@ def train(epochs=1, net=None, loader=None, model_path=None, result_path=None):
     
     with open(result_path+'/max_acc.txt', 'a') as f:
         print('max_accuracy:%f%%'%max(history["val_acc"]), file=f)
+    
     with open(result_path+'/time.txt', 'a') as f:
         print('avarage time/1epoch:%fs'%(sum(history["time"]) / len(history["time"])), file=f)
             

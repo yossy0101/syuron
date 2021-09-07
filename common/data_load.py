@@ -11,17 +11,13 @@ from tiny_imagenet_200.tiny import TImgNetDataset
 #データセット読み込み
 def data_load(size=224, batch=32, datasets='cifar100'):
    if datasets=='cifar10':
-      return datasets, data_load_CIFAR10(size, batch)
+      return data_load_CIFAR10(size, batch)
    elif datasets=='cifar100':
-      return datasets, data_load_CIFAR100(size, batch)
+      return data_load_CIFAR100(size, batch)
    elif datasets=='food':
-      return datasets, data_load_Food101(size, batch)
+      return data_load_Food101(size, batch)
    elif datasets=='tiny':
-      return datasets, data_load_tinyimagenet(size, batch)
-   else:
-      print('That datasets is not')
-      datasets = input("What datasets do you use: ")
-      return data_load(size, batch, datasets)
+      return data_load_tinyimagenet(size, batch)
 
 def transform_train(size=224):
    transform = transforms.Compose([

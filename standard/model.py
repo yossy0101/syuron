@@ -3,20 +3,17 @@ from resnet import _resnet, BasicBlock, Bottleneck
 
 def make_model(model='resnet18', num_classes=100):
     if model=='vgg16':
-        return model, vgg16(num_classes)
+        return vgg16(num_classes)
     elif model=='vgg19':
-        return model, vgg19(num_classes)
+        return vgg19(num_classes)
     elif model=='resnet18':
-        return model, resnet18(num_classes)
+        return resnet18(num_classes)
     elif model=='resnet34':
-        return model, resnet34(num_classes)
+        return resnet34(num_classes)
     elif model=='resnet50':
-        return model, resnet50(num_classes)
+        return resnet50(num_classes)
     elif model=='resnet101':
-        return model, resnet101(num_classes)
-    else:
-        print('That model is not')
-        return make_model(input('What model do you use: '))
+        return resnet101(num_classes)
     
 def vgg16(num_classes=100, **kwargs):
     return _vgg([2, 2, 3, 3, 3], num_classes, **kwargs)

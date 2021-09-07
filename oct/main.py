@@ -1,3 +1,4 @@
+import argparse
 import os
 import sys
 sys.path.append(os.path.abspath("../common"))
@@ -5,29 +6,33 @@ from data_load import data_load
 from model import make_model
 from train import train
 
-IMAGE_SIZE = 256
-BATCH_SIZE = 128
-EPOCHS = 150
-ALPHA = 0.5
+parser = argparse.ArgumentParser(description='PyTorch OctConv')
+parser.add_argument('-image_size', default=256, type=int)
+parser.add_argument('-batch_size', default=128, type=int)
+parser.add_argument('-epochs', default=150, type=int)
+parser.add_argument('-alpha', default=0.25, type=float)
+parser.add_argument('-datasets', help='choices detasets', default='cifar100', 
+                    choices=['cifar10', 'cifar100', 'food101', 'tiny'])
+parser.add_argument('-use_model', help='choices model', default='resnet18', 
+                    choices=['vgg16', 'vgg19', 'resent18', 'resnet34', 'resnet50', 'resnet101'])
 
 #Main
-def main():    
+def main():   
+    args = parser.parse_args()
     #データセットを選択，読み込み
-    datasets = input("What datasets do you use: ")
-    datasets, (loader, num_classes) = data_load(IMAGE_SIZE, BATCH_SIZE, datasets)
+    loader, num_classes = data_load(args.image_size, args.batch_size, args.datasets)
     
     #Modelを選択, 生成
-    use_model = input('What model do you use: ')
-    use_model, net = make_model(use_model, num_classes, ALPHA)
+    net = make_model(args.use_model, num_classes, args.alpha)
     
     #重みの保存先
-    model_path = './weight/' + use_model + '/' + datasets + '/model.pth'
+    model_path = './weight/' + args.use_model + '/' + args.datasets + '/model.pth'
 
     #結果の保存先
-    result_path = './result/' + use_model + '/' + datasets
+    result_path = './result/' + args.use_model + '/' + args.datasets
 
     #学習
-    train(EPOCHS, net, loader, model_path, result_path)
+    train(args.epochs, net, loader, model_path, result_path)
     
 if __name__ == '__main__':
     main()
