@@ -6,7 +6,7 @@ from data_load import data_load
 from model import make_model
 from train import train
 
-parser = argparse.ArgumentParser(description='PyTorch OctConv')
+parser = argparse.ArgumentParser(description='PyTorch StandardConv')
 parser.add_argument('-image_size', default=256, type=int)
 parser.add_argument('-batch_size', default=128, type=int)
 parser.add_argument('-epochs', default=150, type=int)
