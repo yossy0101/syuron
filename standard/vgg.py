@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from conv import Conv_BN_ReLU, fc_ReLU_Drop
+from pytorch_memlab import profile
+from pytorch_memlab import MemReporter
 
 class VGG(nn.Module):
     def __init__(self, layers, num_classes=100):

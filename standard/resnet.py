@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from conv import Conv_BN, Conv_BN_ReLU
+from pytorch_memlab import profile
 
 class BasicBlock(nn.Module):
     expansion = 1
@@ -19,6 +20,7 @@ class BasicBlock(nn.Module):
         )
         self.stride = stride
 
+    @profile
     def forward(self, x):
         sc = x
 
@@ -87,6 +89,7 @@ class ResNet(nn.Module):
 
         return nn.Sequential(*layers)
 
+    # @profile
     def forward(self, x):
         # See note [TorchScript super()]
         x = self.conv1(x)

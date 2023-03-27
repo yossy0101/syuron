@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
+from pytorch_memlab import profile
 
 class OctConv2d(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0, in_alpha=0.0, out_alpha=0.0, bias=True):
@@ -31,7 +31,8 @@ class OctConv2d(nn.Module):
     
         self.downsample = nn.AvgPool2d(kernel_size=(2, 2), stride=2)
         self.upsample = nn.Upsample(scale_factor=2, mode='nearest')
-            
+
+    # @profile  
     def forward(self, x):
         hf, lf = x
 
@@ -76,8 +77,11 @@ class Oct_BN_ReLU(nn.Module):
         self.bn_l = None if out_alpha == 0.0 else nn.BatchNorm2d(self.ch_out_lf)
         self.relu = nn.ReLU(inplace=True)
 
+    # @profile
     def forward(self, x):
         x_h, x_l = self.conv(x)
-        x_h = self.relu(self.bn_h(x_h)) if x_h is not None else None
-        x_l = self.relu(self.bn_l(x_l)) if x_l is not None else None
+        x_h = self.bn_h(x_h) if x_h is not None else None
+        x_h = self.relu(x_h) if x_h is not None else None
+        x_l = self.bn_l(x_l) if x_l is not None else None
+        x_l = self.relu(x_l) if x_l is not None else None
         return x_h, x_l

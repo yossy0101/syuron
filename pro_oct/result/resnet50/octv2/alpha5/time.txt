@@ -1,2 +1,0 @@
-avarage time/1epoch:201.551033s
-avarage time/1epoch:153.538794s
